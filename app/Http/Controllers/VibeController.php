@@ -81,9 +81,12 @@ class VibeController extends Controller
             'path' => '/'.ltrim($request->path(), '/'),
             'query' => $request->query(),
             'headers' => collect($request->headers->all())
-                ->map(fn ($values) => implode(', ', $values))
+                ->reject(fn (array $values, string $name): bool => preg_match(
+                    '/^(authorization|proxy-authorization|cookie|set-cookie|remote-(user|groups|name|email)|x-auth-|x-forwarded-(user|email|groups|name|client-cert))/i',
+                    $name,
+                ) === 1)
+                ->map(fn (array $values): string => implode(', ', $values))
                 ->all(),
-            'cookies' => $request->cookies->all(),
             'body' => $request->getContent(),
         ];
 

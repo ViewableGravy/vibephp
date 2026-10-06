@@ -60,7 +60,7 @@ The [Labor Illusion study](https://www.hbs.edu/faculty/Pages/item.aspx?num=40158
 
 ## Quickstart
 
-- Set an `OPENAI_API_KEY` in `.env`
+- Set an `OPENROUTER_API_KEY` in `.env`
 - Create an `index.php` file in the `vibe/` directory:
   ```php
   <?php
@@ -100,7 +100,7 @@ The core of the engine is implemented as a [Laravel AI agent](https://laravel.co
 ## Demo
 
 - Clone this repo
-- Set an `OPENAI_API_KEY` in `.env`
+- Set an `OPENROUTER_API_KEY` in `.env`
 - Install the project with `composer run setup`
 - Start the server with `php artisan vibe`
 - Visit http://localhost:8000
@@ -139,7 +139,7 @@ echo json_encode(['city' => $city, 'temp_c' => $temp]);
 | `docroot` | `VIBE_DOCROOT` | `vibe/` | Where your "executable" PHP lives |
 | `model` | `VIBE_MODEL` | provider default | Which brain interprets your code |
 
-The provider (OpenAI) is set on the `App\Ai\Agents\VibePhpRuntime` agent via `laravel/ai`.
+The provider (OpenRouter) is set on the `App\Ai\Agents\VibePhpRuntime` agent via `laravel/ai`.
 
 ## ☁️ Vibe Cloud — coming soon
 

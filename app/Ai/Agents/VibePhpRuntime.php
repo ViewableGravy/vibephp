@@ -26,7 +26,7 @@ use Stringable;
  * randomness, the filesystem beyond what it reads) is invented on the fly,
  * plausibly and with vibes.
  */
-#[Provider(Lab::OpenAI)]
+#[Provider(Lab::OpenRouter)]
 #[MaxSteps(20)]
 #[MaxTokens(8192)]
 #[Temperature(0.9)]

@@ -24,6 +24,24 @@ it('serves a script by handing its source to the runtime and mapping the respons
         && $prompt->contains('new PDO('));
 });
 
+it('does not send authentication headers or cookies to the model provider', function () {
+    VibePhpRuntime::fake(fn (string $prompt) => [
+        'status' => 200,
+        'headers' => [],
+        'body' => 'ok',
+    ]);
+
+    $this->withHeaders([
+        'Authorization' => 'Bearer private-authorization-token',
+        'X-Forwarded-User' => 'private-user@example.test',
+        'X-Auth-Request-Email' => 'private-user@example.test',
+    ])->withCookie('authelia_session', 'private-session-cookie')->get('/');
+
+    VibePhpRuntime::assertPrompted(fn (AgentPrompt $prompt) => ! $prompt->contains('private-authorization-token')
+        && ! $prompt->contains('private-user@example.test')
+        && ! $prompt->contains('private-session-cookie'));
+});
+
 it('lets the runtime control status code and content type', function () {
     VibePhpRuntime::fake(fn (string $prompt) => [
         'status' => 200,
