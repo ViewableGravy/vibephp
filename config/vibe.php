@@ -28,6 +28,8 @@ return [
 
     'model' => env('VIBE_MODEL'),
 
+    'strict_front_controller' => env('VIBE_STRICT_FRONT_CONTROLLER', false),
+
     /*
     |--------------------------------------------------------------------------
     | Request Logging

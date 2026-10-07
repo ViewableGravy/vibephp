@@ -17,6 +17,10 @@ class VibeController extends Controller
      */
     public function __invoke(Request $request): Response
     {
+        if (preg_match('/^Uptime-Kuma(?:\/|\s|$)/i', $request->userAgent() ?? '') === 1) {
+            return response('', 204);
+        }
+
         $method = $request->method();
         $path = '/'.ltrim($request->path(), '/');
         $script = $this->resolveScript($request->path());
@@ -54,14 +58,23 @@ class VibeController extends Controller
         $docroot = (string) config('vibe.docroot');
         $path = trim($path, '/');
 
-        $candidates = $path === ''
-            ? ['index.php']
-            : [$path, "{$path}.php", "{$path}/index.php", 'index.php'];
+        if ($path === '') {
+            return is_file($docroot.DIRECTORY_SEPARATOR.'index.php') ? 'index.php' : null;
+        }
 
-        foreach ($candidates as $candidate) {
+        foreach ([$path, "{$path}.php", "{$path}/index.php"] as $candidate) {
             if (is_file($docroot.DIRECTORY_SEPARATOR.$candidate)) {
                 return $candidate;
             }
+        }
+
+        if (! config('vibe.strict_front_controller')) {
+            return is_file($docroot.DIRECTORY_SEPARATOR.'index.php') ? 'index.php' : null;
+        }
+
+        if (preg_match('#^posts/\d+$#D', $path) === 1
+            && is_file($docroot.DIRECTORY_SEPARATOR.'index.php')) {
+            return 'index.php';
         }
 
         return null;
